@@ -89,6 +89,12 @@ namespace SalonApp
                 }
 
                 var selectedRow = DgNotifications.SelectedItem as DataRowView;
+                if (selectedRow == null || selectedRow["ID"] == DBNull.Value)
+                {
+                    MessageBox.Show("Не удалось определить выбранное уведомление.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 var notificationId = Convert.ToInt32(selectedRow["ID"]);
 
                 if (WpfDatabase.MarkNotificationAsRead(notificationId))
