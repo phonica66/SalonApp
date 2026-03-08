@@ -1,0 +1,386 @@
+<Window x:Class="SalonApp.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="👑 Администратор - Система салона красоты" Height="750" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8F9FA">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <Border Grid.Row="0" Background="#2C3E50" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="1119">
+                <StackPanel>
+                    <TextBlock Text="👑 АДМИНИСТРАТОР САЛОНА" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="Управление клиентами, записями и материалами" FontSize="12" Foreground="#BDC3C7"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnRefresh" Content="🔄 Обновить все" Click="BtnRefresh_Click" 
+                           Background="#3498DB" Foreground="White" Padding="10,5" Margin="0,0,10,0"/>
+                    <Button x:Name="BtnLogout" Content="🚪 Выход" Click="BtnLogout_Click" 
+                           Background="#E74C3C" Foreground="White" Padding="10,5"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Основной контент -->
+        <TabControl Grid.Row="1" Background="White" BorderBrush="#DDD">
+
+            <!-- ВКЛАДКА 1: КЛИЕНТЫ -->
+            <TabItem Header="👥 КЛИЕНТЫ">
+                <Grid Margin="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="105*"/>
+                        <ColumnDefinition Width="1039*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Добавление нового клиента -->
+                    <GroupBox Grid.Row="0" Header="➕ Добавить нового клиента" Padding="15" Margin="0,0,0,15" Background="#F0F8FF" Grid.ColumnSpan="2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <Label Content="👤 Имя клиента:" FontWeight="Bold"/>
+                                <TextBox x:Name="TxtClientName" Height="40" FontSize="14" Padding="8"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                <Label Content="📱 Телефон:" FontWeight="Bold"/>
+                                <TextBox x:Name="TxtClientPhone" Height="40" FontSize="14" Padding="10" Text="+7"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                                <Label Content="📧 Email:" FontWeight="Bold"/>
+                                <TextBox x:Name="TxtClientEmail" Height="40" FontSize="12" Padding="8"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="3" x:Name="BtnAddClient" Content="➕ ДОБАВИТЬ КЛИЕНТА" 
+                                   Click="BtnAddClient_Click" VerticalAlignment="Bottom"
+                                   Background="#27AE60" Foreground="White" Padding="15,8" FontWeight="Bold"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Список клиентов -->
+                    <GroupBox Grid.Row="1" Header="👥 Список всех клиентов" Padding="15" Grid.ColumnSpan="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                <Button x:Name="BtnRefreshClients" Content="🔄 Обновить список" 
+                                       Click="BtnRefreshClients_Click" Background="#3498DB" 
+                                       Foreground="White" Padding="10,5" Margin="0,0,10,0"/>
+                                <Button x:Name="BtnDeleteClient" Content="🗑️ Удалить клиента" 
+                                       Click="BtnDeleteClient_Click" Background="#E74C3C" 
+                                       Foreground="White" Padding="10,5"/>
+                            </StackPanel>
+
+                            <DataGrid Grid.Row="1" x:Name="DgClients" AutoGenerateColumns="False" 
+                                     IsReadOnly="True" Background="White" GridLinesVisibility="Horizontal"
+                                     HeadersVisibility="Column" CanUserResizeColumns="True"
+                                     AlternatingRowBackground="#F9F9F9" SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="50"/>
+                                    <DataGridTextColumn Header="👤 Имя" Binding="{Binding Name}" Width="200"/>
+                                    <DataGridTextColumn Header="📱 Телефон" Binding="{Binding Phone}" Width="150"/>
+                                    <DataGridTextColumn Header="📧 Email" Binding="{Binding Email}" Width="200"/>
+                                    <DataGridTextColumn Header="📅 Дата регистрации" Binding="{Binding CreatedDate}" Width="150"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- ВКЛАДКА 2: ЗАПИСИ -->
+            <TabItem Header="📅 ЗАПИСИ">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Создание новой записи -->
+                    <GroupBox Grid.Row="0" Header="📝 Создать новую запись" Padding="15" Margin="0,0,0,15" Background="#FFF0F5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <Label Content="👤 Клиент:" FontWeight="Bold"/>
+                                <ComboBox x:Name="CmbClients"
+          Height="34"
+          FontSize="16"
+          DisplayMemberPath="Display"
+          SelectedValuePath="ID"
+          IsEditable="True"
+          StaysOpenOnEdit="True"
+          IsTextSearchEnabled="False"
+          TextBoxBase.TextChanged="ClientSearch_TextChanged"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                <Label Content="💄 Услуга:" FontWeight="Bold"/>
+                                <ComboBox x:Name="CmbServices" Height="34" FontSize="14"
+                                         DisplayMemberPath="Display" SelectedValuePath="ID"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                                <Label Content="📅 Дата:" FontWeight="Bold"/>
+                                <DatePicker x:Name="DpAppointmentDate" Height="34" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                                <Label Content="🕐 Время:" FontWeight="Bold"/>
+                                <TextBox x:Name="TxtAppointmentTime" Height="34" FontSize="14" 
+                                        Padding="8" Text="10:00"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="4" x:Name="BtnAddAppointment" Content="📝 СОЗДАТЬ ЗАПИСЬ" 
+                                   Click="BtnAddAppointment_Click" VerticalAlignment="Bottom"
+                                   Background="#9B59B6" Foreground="White" Padding="15,8" FontWeight="Bold"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Список записей -->
+                    <GroupBox Grid.Row="1" Header="📅 Журнал всех записей" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                <Button x:Name="BtnRefreshAppointments" Content="🔄 Обновить записи" 
+                                       Click="BtnRefreshAppointments_Click" Background="#3498DB" 
+                                       Foreground="White" Padding="10,5" Margin="0,0,10,0"/>
+                                <Button x:Name="BtnChangeStatus" Content="📊 Изменить статус" 
+                                       Click="BtnChangeStatus_Click" Background="#F39C12" 
+                                       Foreground="White" Padding="10,5"/>
+                            </StackPanel>
+
+                            <DataGrid Grid.Row="1" x:Name="DgAppointments" AutoGenerateColumns="False" 
+                                     IsReadOnly="True" Background="White" GridLinesVisibility="Horizontal"
+                                     HeadersVisibility="Column" CanUserResizeColumns="True"
+                                     AlternatingRowBackground="#F9F9F9" SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="50"/>
+                                    <DataGridTextColumn Header="👤 Клиент" Binding="{Binding ClientName}" Width="150"/>
+                                    <DataGridTextColumn Header="📱 Телефон" Binding="{Binding ClientPhone}" Width="120"/>
+                                    <DataGridTextColumn Header="💄 Услуга" Binding="{Binding ServiceName}" Width="180"/>
+                                    <DataGridTextColumn Header="💰 Цена" Binding="{Binding Price}" Width="80"/>
+                                    <DataGridTextColumn Header="📅 Дата и время" Binding="{Binding DateTimeString, StringFormat='dd.MM.yyyy HH:mm'}" Width="150"/>
+                                    <DataGridTextColumn Header="📊 Статус" Binding="{Binding Status}" Width="100"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- ВКЛАДКА 3: МАТЕРИАЛЫ -->
+            <TabItem Header="📦 МАТЕРИАЛЫ">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Список материалов -->
+                    <GroupBox Grid.Row="0" Header="📦 Склад материалов и инвентарь" Padding="15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="49*"/>
+                                <ColumnDefinition Width="502*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10" Grid.ColumnSpan="2">
+                                <Button x:Name="BtnRefreshMaterials" Content="🔄 Обновить материалы" 
+                                       Click="BtnRefreshMaterials_Click" Background="#3498DB" 
+                                       Foreground="White" Padding="10,5" Margin="0,0,20,0"/>
+                                <TextBlock Text="⚠️ Красным выделены материалы, которые заканчиваются" 
+                                          VerticalAlignment="Center" Foreground="#E74C3C" FontStyle="Italic"/>
+                            </StackPanel>
+
+                            <DataGrid Grid.Row="1" x:Name="DgMaterials" AutoGenerateColumns="False" 
+                                     IsReadOnly="True" Background="White" GridLinesVisibility="Horizontal"
+                                     HeadersVisibility="Column" CanUserResizeColumns="True"
+                                     AlternatingRowBackground="#F9F9F9" Grid.ColumnSpan="2">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="50"/>
+                                    <DataGridTextColumn Header="📦 Материал" Binding="{Binding Name}" Width="200"/>
+                                    <DataGridTextColumn Header="📊 Остаток" Binding="{Binding CurrentStock}" Width="80"/>
+                                    <DataGridTextColumn Header="⚠️ Мин. остаток" Binding="{Binding MinStock}" Width="100"/>
+                                    <DataGridTextColumn Header="📏 Единица" Binding="{Binding Unit}" Width="70"/>
+                                    <DataGridTextColumn Header="📂 Категория" Binding="{Binding Category}" Width="120"/>
+                                    <DataGridTextColumn Header="🏢 Поставщик" Binding="{Binding Supplier}" Width="150"/>
+                                    <DataGridTextColumn Header="💰 Цена за ед." Binding="{Binding CostPerUnit}" Width="100"/>
+                                    <DataGridTextColumn Header="📊 Статус" Binding="{Binding Status}" Width="120"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Уведомление менеджеру -->
+                    <GroupBox Grid.Row="1" Header="📧 Уведомить менеджера о нехватке материалов" 
+                             Padding="15" Margin="0,15,0,0" Background="#FFF8DC">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <Label Content="📦 Выберите материал:" FontWeight="Bold"/>
+                                <ComboBox x:Name="CmbMaterialsForNotification" Height="34" FontSize="14"
+                                         DisplayMemberPath="Display" SelectedValuePath="ID"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                <Label Content="💬 Сообщение менеджеру:" FontWeight="Bold"/>
+                                <TextBox x:Name="TxtNotificationMessage" Height="34" FontSize="14" Padding="6"
+                                        Text="Срочно нужна закупка этого материала!"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="2" x:Name="BtnSendNotification" Content="📧 ОТПРАВИТЬ УВЕДОМЛЕНИЕ" 
+                                   Click="BtnSendNotification_Click" VerticalAlignment="Bottom"
+                                   Background="#E74C3C" Foreground="White" Padding="15,8" FontWeight="Bold"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- ВКЛАДКА 4: СТАТИСТИКА -->
+            <TabItem Header="📊 СТАТИСТИКА">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Статистика доходов -->
+                    <GroupBox Grid.Row="0" Header="💰 Финансовая статистика" Padding="20" Margin="0,0,0,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="#E8F5E8" CornerRadius="10" Padding="20" Margin="0,0,10,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="💰 ОБЩИЕ ДОХОДЫ" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="TxtTotalIncome" Text="0 ₽" FontSize="20" FontWeight="Bold" 
+                                              Foreground="#27AE60" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" Background="#E3F2FD" CornerRadius="10" Padding="20" Margin="0,0,10,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="📊 ВЫПОЛНЕНО ЗАПИСЕЙ" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="TxtCompletedAppointments" Text="0" FontSize="20" FontWeight="Bold" 
+                                              Foreground="#2196F3" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="#FFF3E0" CornerRadius="10" Padding="20" Margin="0,0,10,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="👥 ВСЕГО КЛИЕНТОВ" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                    <TextBlock x:Name="TxtTotalClients" Text="0" FontSize="20" FontWeight="Bold" 
+                                              Foreground="#FF9800" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Grid.Column="3" x:Name="BtnRefreshStatistics" Content="📊 ОБНОВИТЬ СТАТИСТИКУ" 
+                                   Click="BtnRefreshStatistics_Click" Background="#9C27B0" Foreground="White" 
+                                   Padding="15,15" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Информация -->
+                    <GroupBox Grid.Row="1" Header="ℹ️ Справочная информация" Padding="15">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <TextBlock FontSize="16" FontWeight="Bold" Margin="0,0,0,10">
+                                    📋 Функции администратора салона красоты:
+                                </TextBlock>
+
+                                <TextBlock TextWrapping="Wrap" Margin="0,0,0,8">
+                                    <Bold>👥 Управление клиентами:</Bold> добавление новых клиентов в базу данных, 
+                                    просмотр информации о существующих клиентах, удаление клиентов с обязательным 
+                                    указанием причины.
+                                </TextBlock>
+
+                                <TextBlock TextWrapping="Wrap" Margin="0,0,0,8">
+                                    <Bold>📅 Управление записями:</Bold> создание записей клиентов на услуги, 
+                                    изменение статусов записей (Новая → Подтверждена → Выполнена), 
+                                    просмотр журнала всех записей.
+                                </TextBlock>
+
+                                <TextBlock TextWrapping="Wrap" Margin="0,0,0,8">
+                                    <Bold>📦 Контроль материалов:</Bold> отслеживание остатков материалов и 
+                                    инвентаря на складе, получение уведомлений о заканчивающихся материалах, 
+                                    отправка уведомлений менеджеру о необходимости закупок.
+                                </TextBlock>
+
+                                <TextBlock TextWrapping="Wrap" Margin="0,0,0,8">
+                                    <Bold>💰 Просмотр доходов:</Bold> анализ доходов салона от выполненных услуг, 
+                                    просмотр статистики по клиентам и записям.
+                                </TextBlock>
+
+                                <Border Background="#E3F2FD" CornerRadius="5" Padding="15" Margin="0,15,0,0">
+                                    <TextBlock TextWrapping="Wrap" FontWeight="Bold" Foreground="#1976D2">
+                                        💡 Совет: Регулярно проверяйте остатки материалов и своевременно 
+                                        уведомляйте менеджера о необходимости закупок для бесперебойной работы салона.
+                                    </TextBlock>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Статус бар -->
+        <Border Grid.Row="2" Background="#34495E" CornerRadius="5" Padding="10" Margin="0,10,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" x:Name="TxtStatus" Text="Система готова к работе" 
+                          Foreground="White" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" x:Name="TxtConnectionStatus" Text="🔗 Локальная база данных" 
+                          Foreground="#F39C12" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

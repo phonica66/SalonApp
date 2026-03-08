@@ -1,0 +1,301 @@
+<Window x:Class="SalonApp.ManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="👔 Менеджер - Панель управления" Height="700" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8F9FA">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <Border Grid.Row="0" Background="#8E44AD" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <StackPanel>
+                    <TextBlock Text="👔 МЕНЕДЖЕР" FontSize="22" FontWeight="Bold" Foreground="White"/>
+                    <TextBlock Text="Закупки, расходы, доходы и статистика" FontSize="12" Foreground="#E8E8E8"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnCheckNotifications" Content="📧 Уведомления" Click="BtnCheckNotifications_Click" 
+                           Background="#E74C3C" Foreground="White" Padding="10,5" Margin="0,0,10,0"/>
+                    <Button x:Name="BtnRefresh" Content="🔄 Обновить" Click="BtnRefresh_Click" 
+                           Background="#3498DB" Foreground="White" Padding="10,5"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Основной контент -->
+        <TabControl Grid.Row="1" Background="White" BorderBrush="#E1E8ED">
+
+            <!-- ВКЛАДКА УВЕДОМЛЕНИЯ -->
+            <TabItem Header="📧 УВЕДОМЛЕНИЯ" Background="White">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#FFE0B2" CornerRadius="5" Padding="15" Margin="0,0,0,15">
+                        <StackPanel>
+                            <TextBlock Text="📧 ВХОДЯЩИЕ УВЕДОМЛЕНИЯ" FontSize="16" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock Text="Здесь отображаются уведомления от администратора о заканчивающихся материалах" 
+                                      TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <GroupBox Grid.Row="1" Header="📧 Список уведомлений" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                                <Button x:Name="BtnRefreshNotifications" Content="🔄 Обновить" Click="BtnRefreshNotifications_Click"
+                                       Background="#3498DB" Foreground="White" Padding="10,5" Margin="0,0,10,0"/>
+                                <Button x:Name="BtnMarkAsRead" Content="✅ Отметить как прочитанное" Click="BtnMarkAsRead_Click"
+                                       Background="#27AE60" Foreground="White" Padding="10,5"/>
+                            </StackPanel>
+
+                            <DataGrid Grid.Row="1" x:Name="DgNotifications" AutoGenerateColumns="False" 
+                                     IsReadOnly="True" Background="White" GridLinesVisibility="Horizontal"
+                                     HeadersVisibility="Column" CanUserResizeColumns="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="50"/>
+                                    <DataGridTextColumn Header="📧 Сообщение" Binding="{Binding Сообщение}" Width="*"/>
+                                    <DataGridTextColumn Header="👤 От кого" Binding="{Binding [От кого]}" Width="150"/>
+                                    <DataGridTextColumn Header="📦 Материал" Binding="{Binding Материал}" Width="150"/>
+                                    <DataGridTextColumn Header="🕐 Время" Binding="{Binding Время, StringFormat=dd.MM.yyyy HH:mm}" Width="130"/>
+                                </DataGrid.Columns>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="#FFF3E0"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                    </Style>
+                                </DataGrid.RowStyle>
+                            </DataGrid>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- ВКЛАДКА ЗАКУПКИ -->
+            <TabItem Header="🛒 ЗАКУПКИ" Background="White">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Добавление закупки -->
+                    <GroupBox Grid.Row="0" Header="➕ Добавить закупку" Margin="0,0,0,15" Padding="15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <Label Content="📦 Материал:"/>
+                                <ComboBox x:Name="CmbMaterials" Height="32" DisplayMemberPath="Value" 
+                                         SelectedValuePath="Key" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                                <Label Content="📊 Количество:"/>
+                                <TextBox x:Name="TxtQuantity" Height="32" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                                <Label Content="💰 Цена за единицу (₽):"/>
+                                <TextBox x:Name="TxtCostPerUnit" Height="32" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                                <Label Content="🏢 Поставщик:"/>
+                                <TextBox x:Name="TxtSupplier" Height="32" FontSize="14"/>
+                            </StackPanel>
+
+                            <Button Grid.Column="4" x:Name="BtnAddPurchase" Content="🛒 ЗАКУПИТЬ" Click="BtnAddPurchase_Click"
+                                   Background="#E67E22" Foreground="White" Padding="15,8" 
+                                   VerticalAlignment="Bottom" Margin="10,0,0,0"/>
+
+                            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,10,0">
+                                <Label Content="📄 Номер счета/накладной (необязательно):"/>
+                                <TextBox x:Name="TxtInvoiceNumber" Height="32" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Margin="0,10,0,0">
+                                <Label Content="📝 Примечания (необязательно):"/>
+                                <TextBox x:Name="TxtNotes" Height="32" FontSize="14"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- История закупок -->
+                    <GroupBox Grid.Row="1" Header="🛒 История закупок" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Button Grid.Row="0" x:Name="BtnRefreshPurchases" Content="🔄 Обновить" Click="BtnRefreshPurchases_Click"
+                                   Background="#3498DB" Foreground="White" Padding="10,5" 
+                                   HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+                            <DataGrid Grid.Row="1" x:Name="DgPurchases" AutoGenerateColumns="False" 
+                                     IsReadOnly="True" Background="White" GridLinesVisibility="Horizontal"
+                                     HeadersVisibility="Column" CanUserResizeColumns="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding ID}" Width="50"/>
+                                    <DataGridTextColumn Header="📦 Материал" Binding="{Binding Материал}" Width="*"/>
+                                    <DataGridTextColumn Header="📊 Количество" Binding="{Binding Количество}" Width="90"/>
+                                    <DataGridTextColumn Header="💰 Цена за ед." Binding="{Binding [Цена за ед.]}" Width="100"/>
+                                    <DataGridTextColumn Header="💵 Общая стоимость" Binding="{Binding [Общая стоимость]}" Width="120"/>
+                                    <DataGridTextColumn Header="🏢 Поставщик" Binding="{Binding Поставщик}" Width="*"/>
+                                    <DataGridTextColumn Header="📅 Дата закупки" Binding="{Binding purchasedate, StringFormat=dd.MM.yyyy}" Width="110"/>
+                                    <DataGridTextColumn Header="📄 Номер счета" Binding="{Binding invoicenumber}" Width="100"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <!-- ВКЛАДКА СТАТИСТИКА -->
+            <TabItem Header="📊 СТАТИСТИКА" Background="White">
+                <Grid Margin="15">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Финансовая сводка -->
+                    <GroupBox Grid.Row="0" Header="💰 Финансовая сводка" Padding="20" Margin="0,0,0,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="#E8F5E8" CornerRadius="10" Padding="20" Margin="0,0,10,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="💰 ДОХОДЫ" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtTotalIncome" Text="0 ₽" FontSize="24" FontWeight="Bold" 
+                                              Foreground="#27AE60" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" Background="#FFEBEE" CornerRadius="10" Padding="20" Margin="0,0,10,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="💸 РАСХОДЫ" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtTotalExpenses" Text="0 ₽" FontSize="24" FontWeight="Bold" 
+                                              Foreground="#E74C3C" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="2" Background="#F3E5F5" CornerRadius="10" Padding="20" Margin="0,0,10,0">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="💵 ПРИБЫЛЬ" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtProfit" Text="0 ₽" FontSize="24" FontWeight="Bold" 
+                                              Foreground="#9C27B0" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Button Grid.Column="3" x:Name="BtnRefreshStatistics" Content="📊&#10;ОБНОВИТЬ&#10;СТАТИСТИКУ" 
+                                   Click="BtnRefreshStatistics_Click" Background="#9C27B0" Foreground="White" 
+                                   Padding="15,10" FontSize="10" FontWeight="Bold"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Детальная статистика -->
+                    <GroupBox Grid.Row="1" Header="📋 Детальная информация" Padding="15" Margin="0,0,0,15">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                                <TextBlock Text="👥 Клиенты:" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtClientsCount" Text="0" FontSize="18" Foreground="#2196F3"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,15,0">
+                                <TextBlock Text="📅 Всего записей:" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtAppointmentsCount" Text="0" FontSize="18" Foreground="#FF9800"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="✅ Выполнено записей:" FontWeight="Bold"/>
+                                <TextBlock x:Name="TxtCompletedCount" Text="0" FontSize="18" Foreground="#4CAF50"/>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Информация для менеджера -->
+                    <GroupBox Grid.Row="2" Header="ℹ️ Информация" Padding="15">
+                        <StackPanel>
+                            <TextBlock FontSize="16" FontWeight="Bold" Margin="0,0,0,10">
+                                📋 Обязанности менеджера:
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,5">
+                                • 📧 Получение уведомлений: от администратора о заканчивающихся материалах
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,5">
+                                • 🛒 Управление закупками: покупка материалов, ведение истории закупок
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,5">
+                                • 💰 Контроль финансов: отслеживание доходов, расходов и прибыли
+                            </TextBlock>
+                            <TextBlock TextWrapping="Wrap" Margin="0,0,0,5">
+                                • 📊 Анализ статистики: мониторинг общей эффективности салона
+                            </TextBlock>
+
+                            <Border Background="#E8F5E8" CornerRadius="5" Padding="10" Margin="0,15,0,0">
+                                <TextBlock TextWrapping="Wrap" FontWeight="Bold">
+                                    💡 Совет: Регулярно проверяйте уведомления и своевременно заказывайте материалы 
+                                    для бесперебойной работы салона.
+                                </TextBlock>
+                            </Border>
+                        </StackPanel>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- Статус бар -->
+        <Border Grid.Row="2" Background="#8E44AD" CornerRadius="5" Padding="10" Margin="0,10,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" x:Name="TxtStatus" Text="Готов к работе" Foreground="White" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" x:Name="TxtNotificationCount" Text="📧 0 непрочитанных" Foreground="#F39C12" 
+                          VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <Button Grid.Column="2" Content="🚪 Выход" Click="BtnLogout_Click" Background="#E74C3C" 
+                       Foreground="White" Padding="10,5"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

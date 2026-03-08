@@ -1,0 +1,49 @@
+<Window x:Class="SalonApp.ReasonInputDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Укажите причину" Height="250" Width="450"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F8F9FA">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" x:Name="TxtTitle" Text="Укажите причину удаления:" 
+                   FontSize="16" FontWeight="Bold" Margin="0,0,0,15"/>
+
+        <!-- Поле ввода с псевдо-водяным знаком -->
+        <Grid Grid.Row="1">
+            <Border BorderBrush="#DDD" BorderThickness="1" CornerRadius="5" Padding="10">
+                <TextBox x:Name="TxtReason" TextWrapping="Wrap" AcceptsReturn="True" 
+                        FontSize="14" BorderThickness="0" Background="Transparent"
+                       VerticalScrollBarVisibility="Auto"
+                        TextChanged="TxtReason_TextChanged"/>
+            </Border>
+
+            <!-- Водяной знак -->
+            <TextBlock x:Name="TxtWatermark"
+                       Text="Введите подробную причину удаления..."
+                       Foreground="#888"
+                       Margin="15,10,0,0"
+                       IsHitTestVisible="False"
+                       VerticalAlignment="Top"
+                       FontSize="14"/>
+        </Grid>
+
+        <!-- Кнопки -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button x:Name="BtnOK" Content="✅ Подтвердить" Click="BtnOK_Click"
+                   Background="#27AE60" Foreground="White" Padding="20,8" Margin="0,0,10,0"
+                   FontWeight="Bold" IsDefault="True"/>
+            <Button x:Name="BtnCancel" Content="❌ Отмена" Click="BtnCancel_Click"
+                   Background="#95A5A6" Foreground="White" Padding="20,8"
+                   FontWeight="Bold" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

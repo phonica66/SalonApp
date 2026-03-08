@@ -1,0 +1,72 @@
+<Window x:Class="SalonApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Салон красоты - Система управления"
+        Height="666" Width="600"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <!-- Градиентный фон -->
+    <Window.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#3498DB" Offset="0"/>
+            <GradientStop Color="#2C3E50" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Заголовок -->
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,20,0,30">
+            <TextBlock Text="САЛОН КРАСОТЫ" FontSize="32" FontWeight="Bold" 
+                      Foreground="White" HorizontalAlignment="Center"/>
+            <TextBlock Text="СИСТЕМА УПРАВЛЕНИЯ (WPF VERSION)" FontSize="14" 
+                      Foreground="#BDC3C7" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <!-- Форма авторизации -->
+        <Border Grid.Row="1" Grid.ColumnSpan="2" Background="White" CornerRadius="15" Padding="40">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="4" Opacity="0.3"/>
+            </Border.Effect>
+
+            <StackPanel>
+                <TextBlock Text="🔐 АВТОРИЗАЦИЯ" FontSize="20" FontWeight="Bold" 
+                          Foreground="#2C3E50" HorizontalAlignment="Center" Margin="0,0,0,25"/>
+
+                <Label Content="👤 Логин:" FontWeight="Bold" FontSize="14"/>
+                <TextBox x:Name="TxtUsername" Height="40" FontSize="12" Margin="0,5,0,15"
+                        Padding="10" BorderBrush="#BDC3C7" BorderThickness="2"/>
+
+                <Label Content="🔒 Пароль:" FontWeight="Bold" FontSize="14"/>
+                <PasswordBox x:Name="TxtPassword" Height="40" FontSize="12" Margin="0,5,0,25"
+                            Padding="10" BorderBrush="#BDC3C7" BorderThickness="2"/>
+
+                <Button x:Name="BtnLogin" Content="ВОЙТИ В СИСТЕМУ" Click="BtnLogin_Click"
+                       Height="45" FontSize="16" FontWeight="Bold" 
+                       Background="#27AE60" Foreground="White" 
+                       BorderThickness="0" Margin="0,0,0,20">
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.3"/>
+                    </Button.Effect>
+                </Button>
+
+                <TextBlock Text="Состояние подключения:" FontWeight="Bold" FontSize="12" Margin="0,10,0,5"/>
+                <TextBlock x:Name="TxtConnectionStatus" Text="🔗 Локальная база данных" 
+                          FontSize="12" Foreground="#F39C12" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        
+              
+    </Grid>
+</Window>

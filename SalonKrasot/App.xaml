@@ -1,0 +1,10 @@
+﻿<Application x:Class="SalonKrasot.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Startup="Application_Startup"
+             Exit="Application_Exit"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!-- Простые ресурсы без сложных стилей -->
+    </Application.Resources>
+</Application>
